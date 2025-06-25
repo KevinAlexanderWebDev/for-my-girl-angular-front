@@ -1,34 +1,83 @@
-<section class="library-container p-4">
-  <!-- Botón de regreso a Home -->
+<section class="library-container">
   <button class="back-btn" routerLink="/home">
-  <img src="assets/img/volverahome.png" alt="icono de volver a home" class="action-icon" />
+    <img src="assets/img/volverahome.png" alt="icono de volver a home" class="action-icon" />
     ← Volver a Home
   </button>
 
-  <!-- Contenido de la foto -->
-  <div *ngIf="photo" class="photo-card">
-    <img
-      [src]="photo.imgUrl"
-      [alt]="photo.title"
-      class="photo-img"
-    />
+  <div *ngIf="photo" class="library-layout">
+    <!-- Lado izquierdo: Imagen tipo polaroid -->
+    <div class="photo-polaroid">
+      <div class="polaroid-frame">
+        <img
+          [src]="photo.imgUrl"
+          [alt]="photo.title"
+          (click)="isModalOpen = true"
+          class="photo-img"
+        />
+        <p class="caption">{{ photo.title }}</p>
+      </div>
+    </div>
 
-    <h1 class="photo-title">Nombre de la foto: {{ photo.title }}</h1>
-    <h2> Descripción: </h2>
-    <p class="photo-description">{{ photo.description }}</p> <!-- 🆕 -->
-    <p class="photo-date">Creado el {{ photo.createdAt | date }}</p>
+    <!-- Modal de imagen ampliada con controles -->
+    <div class="modal" [class.active]="isModalOpen" (click)="closeModal()">
+      <div class="modal-content" (click)="$event.stopPropagation()">
+        <div class="modal-toolbar" *ngIf="!shouldHideToolbar()">
+          <button class="download-btn" (click)="downloadImage()" title="Descargar">
+            <img src="assets/img/iconos-modal/descargar.png" alt="Descargar" />
+          </button>
+          <button class="rotate-btn" (click)="rotatePhoto()" title="Rotar">
+            <img src="assets/img/iconos-modal/girar-pantalla.png" alt="Rotar" />
+          </button>
+          <button class="close-btn" (click)="closeModal()" title="Cerrar">
+            <img src="assets/img/iconos-modal/cerrar.png" alt="Cerrar" />
+          </button>
+        </div>
 
-    <!-- Botones de acciones -->
-    <div class="actions-row">
-      <button class="create-btn" routerLink="/crea-tu-recuerdo">
-        <img src="assets/img/crear-recuerdo.png" alt="icono de crear recuerdo" class="action-icon" />
-        Crear tu Recuerdo
-      </button>
+        <!-- Tooltip visible al hacer zoom -->
+        <div class="reset-tooltip" *ngIf="scale !== 1">
+          Haz clic para restablecer la vista
+        </div>
 
-      <button class="delete-btn" (click)="deletePhoto()">
-        <img src="assets/img/borrar-recuerdo.png" alt="icono de borrar recuerdo" class="action-icon" />
-        Borrar Recuerdo
-      </button>
+        <!-- Botón flotante permanente para reset -->
+        <button class="reset-float" (click)="resetTransforms()" title="Restablecer vista">
+          ↺
+        </button>
+
+        <!-- Imagen con zoom, rotación y arrastre -->
+        <img
+          [src]="photo?.imgUrl"
+          [alt]="photo?.title"
+          [style.transform]="'translate(' + translateX + 'px,' + translateY + 'px) rotate(' + rotation + 'deg) scale(' + scale + ')'"
+          (mousedown)="onMouseDown($event)"
+          (mousemove)="onMouseMove($event)"
+          (mouseup)="onMouseUp()"
+          (mouseleave)="onMouseUp()"
+          (touchstart)="onMouseDown($event)"
+          (touchmove)="onMouseMove($event)"
+          (touchend)="onMouseUp()"
+          (wheel)="onWheel($event)"
+          draggable="false"
+        />
+      </div>
+    </div>
+
+    <!-- Lado derecho: Detalles -->
+    <div class="photo-info">
+      <h2>Descripción</h2>
+      <p class="photo-description">{{ photo.description }}</p>
+      <p class="photo-date">Creado el {{ photo.createdAt | date }}</p>
+
+      <div class="actions-row">
+        <button class="create-btn" routerLink="/crea-tu-recuerdo">
+          <img src="assets/img/crear-recuerdo.png" alt="crear recuerdo" class="action-icon" />
+          Crear Recuerdo
+        </button>
+
+        <button class="delete-btn" (click)="deletePhoto()">
+          <img src="assets/img/borrar-recuerdo.png" alt="borrar recuerdo" class="action-icon" />
+          Borrar Recuerdo
+        </button>
+      </div>
     </div>
   </div>
 </section>

@@ -1,0 +1,34 @@
+<section class="library-container p-4">
+  <!-- Botón de regreso a Home -->
+  <button class="back-btn" routerLink="/home">
+  <img src="assets/img/volverahome.png" alt="icono de volver a home" class="action-icon" />
+    ← Volver a Home
+  </button>
+
+  <!-- Contenido de la foto -->
+  <div *ngIf="photo" class="photo-card">
+    <img
+      [src]="photo.imgUrl"
+      [alt]="photo.title"
+      class="photo-img"
+    />
+
+    <h1 class="photo-title">Nombre de la foto: {{ photo.title }}</h1>
+    <h2> Descripción: </h2>
+    <p class="photo-description">{{ photo.description }}</p> <!-- 🆕 -->
+    <p class="photo-date">Creado el {{ photo.createdAt | date }}</p>
+
+    <!-- Botones de acciones -->
+    <div class="actions-row">
+      <button class="create-btn" routerLink="/crea-tu-recuerdo">
+        <img src="assets/img/crear-recuerdo.png" alt="icono de crear recuerdo" class="action-icon" />
+        Crear tu Recuerdo
+      </button>
+
+      <button class="delete-btn" (click)="deletePhoto()">
+        <img src="assets/img/borrar-recuerdo.png" alt="icono de borrar recuerdo" class="action-icon" />
+        Borrar Recuerdo
+      </button>
+    </div>
+  </div>
+</section>

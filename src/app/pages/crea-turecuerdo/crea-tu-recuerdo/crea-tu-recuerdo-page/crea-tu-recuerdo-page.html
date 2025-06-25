@@ -1,0 +1,63 @@
+<section class="create-recall-container">
+  <button class="volver-home" routerLink="/home">
+    <img src="assets/img/casa-after.png" alt="icono de ir a home" class="home-button" />
+    Volver a Home
+  </button>
+  <h1 class="page-title">💖 Crea tu Recuerdo 💖</h1>
+
+  <form [formGroup]="recuerdoForm" (ngSubmit)="onSubmit()" class="recall-form">
+    <!-- Título -->
+    <label class="field-group">
+      <span class="field-label">Título del Recuerdo</span>
+      <input
+        type="text"
+        formControlName="title"
+        placeholder="Título"
+        required
+      />
+    </label>
+
+    <!-- Fecha -->
+    <label class="field-group">
+      <span class="field-label">Fecha del Recuerdo</span>
+      <input
+        type="date"
+        formControlName="date"
+        required
+      />
+    </label>
+
+    <!-- Descripción -->
+    <label class="field-group">
+      <span class="field-label">Descripción</span>
+      <textarea
+        formControlName="description"
+        placeholder="Escribe algo bonito..."
+        rows="4"
+        required
+      ></textarea>
+    </label>
+
+    <!-- Imagen -->
+    <label class="field-group">
+      <span class="field-label">Imagen del Recuerdo</span>
+      <div class="image-upload-wrapper">
+        <input
+          type="file"
+          (change)="onFileSelected($event)"
+          accept="image/*"
+          required
+        />
+      </div>
+    </label>
+
+    <!-- Botón -->
+    <button
+      type="submit"
+      class="submit-btn"
+      [disabled]="recuerdoForm.invalid || !selectedFile"
+    >
+      🎉 Crear Recuerdo
+    </button>
+  </form>
+</section>

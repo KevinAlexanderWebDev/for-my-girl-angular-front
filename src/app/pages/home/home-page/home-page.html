@@ -1,0 +1,49 @@
+<section class="photos-list-container">
+  <div class="header-row">
+    <h1 class="page-title">
+      <img src="assets/img/album-de-fotos.png" alt class="filter-icon" />
+      Our photo album
+    </h1>
+    <input
+      type="text"
+      placeholder="Buscar por título..."
+      [(ngModel)]="searchTerm"
+      class="search-input"
+    />
+    <img src="assets/img/filtrar.png" alt="Filtro" class="filter-icon" />
+    <input
+      type="date"
+      [(ngModel)]="filterDate"
+      class="date-input"
+    />
+  </div>
+
+  <div class="photos-grid">
+    <div
+      *ngFor="let photo of filteredPhotos()"
+      class="photo-card"
+      [ngStyle]="getRandomStyle(photo._id || '')"
+    >
+      <a [routerLink]="['/biblioteca', photo._id]">
+        <img [src]="photo.imgUrl" [alt]="photo.title" />
+      </a>
+      <h2>{{ photo.title }}</h2>
+      <button [routerLink]="['/biblioteca', photo._id]">Ver detalles</button>
+    </div>
+  </div>
+
+  <p class="no-results" *ngIf="filteredPhotos().length === 0">
+    No hay fotos que coincidan con los filtros
+  </p>
+
+  <img
+    [class.visible]="showScrollTop"
+    class="scroll-to-top-img"
+    src="assets/img/subir.png"
+    alt="Subir"
+    role="button"
+    tabindex="0"
+    (click)="scrollToTop()"
+    (keydown.enter)="scrollToTop()"
+  />
+</section>

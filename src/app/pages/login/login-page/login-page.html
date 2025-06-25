@@ -1,0 +1,27 @@
+<div class="page-container-for-login">
+  <!-- Imagen del candado -->
+  <img src="assets/img/bloqueo-del-corazon.png" alt="Candado" class="lock-icon" />
+
+  <h1>Bienvenida ❤️</h1>
+
+  <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+    <label for="username">Usuario</label>
+    <input
+      id="username"
+      formControlName="username"
+      placeholder="Nombre de usuario"
+    />
+
+    <label for="password">Contraseña</label>
+    <input
+      id="password"
+      formControlName="password"
+      placeholder="Contraseña"
+      type="password"
+    />
+
+    <button type="submit" [disabled]="loginForm.invalid">Iniciar sesión</button>
+  </form>
+
+  <p class="text-center mt-2 text-muted">Sólo usuarios autorizados.</p>
+</div>

@@ -1,63 +1,60 @@
-<section class="create-recall-container">
+<section class="create-recall-container mixed">
   <button class="volver-home" routerLink="/home">
-    <img src="assets/img/casa-after.png" alt="icono de ir a home" class="home-button" />
+    <img src="assets/img/casa-after.png" alt="Volver a Home" class="home-button" />
     Volver a Home
   </button>
-  <h1 class="page-title">💖 Crea tu Recuerdo 💖</h1>
 
-  <form [formGroup]="recuerdoForm" (ngSubmit)="onSubmit()" class="recall-form">
-    <!-- Título -->
-    <label class="field-group">
-      <span class="field-label">Título del Recuerdo</span>
-      <input
-        type="text"
-        formControlName="title"
-        placeholder="Título"
-        required
+  <div class="recall-wrapper">
+    <div class="recall-preview">
+      <img
+        *ngIf="imagePreviewUrl; else defaultImg"
+        [src]="imagePreviewUrl"
+        alt="Vista previa"
       />
-    </label>
+      <ng-template #defaultImg>
+        <img src="assets/img/image-example.jpg" alt="Ilustración por defecto" />
+      </ng-template>
+    </div>
 
-    <!-- Fecha -->
-    <label class="field-group">
-      <span class="field-label">Fecha del Recuerdo</span>
-      <input
-        type="date"
-        formControlName="date"
-        required
-      />
-    </label>
+    <form [formGroup]="recuerdoForm" (ngSubmit)="onSubmit()" class="recall-form">
+      <img src="assets/img/pegatina.png" alt="Clip decorativo" class="clip-decor" />
+      <h1 class="page-title">📝 Escribe tu Recuerdo</h1>
 
-    <!-- Descripción -->
-    <label class="field-group">
-      <span class="field-label">Descripción</span>
-      <textarea
-        formControlName="description"
-        placeholder="Escribe algo bonito..."
-        rows="4"
-        required
-      ></textarea>
-    </label>
+      <label class="field-group">
+        <span class="field-label">Título</span>
+        <input type="text" formControlName="title" placeholder="Un momento especial..." required />
+      </label>
 
-    <!-- Imagen -->
-    <label class="field-group">
-      <span class="field-label">Imagen del Recuerdo</span>
-      <div class="image-upload-wrapper">
-        <input
-          type="file"
-          (change)="onFileSelected($event)"
-          accept="image/*"
+      <label class="field-group">
+        <span class="field-label">Fecha</span>
+        <input type="date" formControlName="date" required />
+      </label>
+
+      <label class="field-group">
+        <span class="field-label">Descripción</span>
+        <textarea
+          formControlName="description"
+          rows="5"
+          placeholder="Ese día que nunca olvidarás..."
           required
-        />
-      </div>
-    </label>
+        ></textarea>
+      </label>
 
-    <!-- Botón -->
-    <button
-      type="submit"
-      class="submit-btn"
-      [disabled]="recuerdoForm.invalid || !selectedFile"
-    >
-      🎉 Crear Recuerdo
-    </button>
-  </form>
+      <label class="field-group file">
+        <span class="field-label">Imagen</span>
+        <input type="file" (change)="onFileSelected($event)" accept="image/*" required />
+      </label>
+
+      <button
+        type="submit"
+        class="submit-btn"
+        [disabled]="recuerdoForm.invalid || !selectedFile"
+      >
+        Guardar Recuerdo
+      </button>
+    </form>
+    <div class="success-stamp" *ngIf="recuerdoCreado">
+      <img src="assets/img/sello-exito.png" alt="Recuerdo guardado" />
+    </div>
+  </div>
 </section>

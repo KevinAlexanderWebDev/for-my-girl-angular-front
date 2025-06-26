@@ -22,7 +22,11 @@ export const routes: Routes = [
     path: 'crea-tu-recuerdo',
     loadComponent: () =>
       import('./pages/crea-turecuerdo/crea-tu-recuerdo/crea-tu-recuerdo-page/crea-tu-recuerdo-page').then(m => m.CreaTuRecuerdoPage),
-    // luego le pondremos el guard aquí
+  },
+  {
+    path: 'editor-de-recuerdos/:id',
+    loadComponent: () =>
+      import('./pages/editor-de-recuerdos/editor-de-recuerdos').then(m => m.EditorDeRecuerdosComponent),
   },
   {
     path: '',

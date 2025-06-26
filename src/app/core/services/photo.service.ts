@@ -8,6 +8,7 @@ export interface Photo {
   title: string;
   description: string; 
   imgUrl: string;
+  date: string; 
   createdAt?: string; //El signo de pregunta invertido hace al valor indefinido XD
 }
 
@@ -30,12 +31,17 @@ export class PhotoService {
   }
 
   // POST subir una nueva foto
-  uploadPhoto(title: string, description: string, file: File): Observable<Photo> {
+  uploadPhoto(title: string, description: string, file: File, date: string): Observable<Photo> {
     const formData = new FormData();
     formData.append('title', title);
     formData.append('description', description);
+    formData.append('date', date);
     formData.append('image', file); // clave "image"
     return this.http.post<Photo>(this.apiUrl, formData);
+  }
+
+  updatePhoto(id: string, data: Partial<Photo>) {
+    return this.http.put<Photo>(`${this.apiUrl}/${id}`, data);
   }
 
   deletePhoto(id: string): Observable<any> {

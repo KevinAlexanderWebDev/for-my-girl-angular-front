@@ -14,6 +14,8 @@ import { PhotoService } from '../../../../core/services/photo.service';
 export class CreaTuRecuerdoPage {
   recuerdoForm: FormGroup;
   selectedFile: File | null = null;
+  imagePreviewUrl: string | null = null;
+  recuerdoCreado= false; 
 
   constructor(
     private fb: FormBuilder,
@@ -29,8 +31,14 @@ export class CreaTuRecuerdoPage {
 
   onFileSelected(event: Event) {
     const input = event.target as HTMLInputElement;
-    if (input.files && input.files.length > 0) {
+    if (input.files && input.files[0]) {
       this.selectedFile = input.files[0];
+
+      const reader = new FileReader();
+      reader.onload = () => {
+        this.imagePreviewUrl = reader.result as string;
+      };
+      reader.readAsDataURL(this.selectedFile);
     }
   }
 
@@ -40,13 +48,17 @@ export class CreaTuRecuerdoPage {
       return;
     }
 
-    const { title, description } = this.recuerdoForm.value;
+    const { title, description, date } = this.recuerdoForm.value;
 
     try {
-      await this.photoService.uploadPhoto(title, description, this.selectedFile).toPromise();
+      await this.photoService.uploadPhoto(title, description, this.selectedFile, date).toPromise();
       alert('✅ Recuerdo creado correctamente');
-      this.router.navigate(['/home']);
-    } catch (error) {
+      this.recuerdoCreado = true;
+          setTimeout(() => {
+          this.recuerdoCreado = false;
+          this.router.navigate(['/home']);
+        }, 1800);
+      }catch (error) {
       console.error(error);
       alert('Error al crear el recuerdo, inténtalo nuevamente');
     }

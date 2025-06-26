@@ -1,0 +1,45 @@
+<div class="editor-page">
+
+  <!-- Imagen a pantalla completa (o bien dividida en columna izquierda) -->
+  <div class="image-preview-container">
+    <img [src]="previewUrl || photo?.imgUrl" alt="Previsualización del recuerdo" />
+  </div>
+
+  <!-- Panel del editor -->
+  <div class="editor-container">
+    <h2>Editar Recuerdo</h2>
+
+    <form [formGroup]="editForm" (ngSubmit)="onSubmit()">
+      <label>
+        Título:
+        <input formControlName="title" type="text" placeholder="Título del recuerdo" />
+      </label>
+
+      <label>
+        Descripción:
+        <textarea formControlName="description" placeholder="Cuenta tu historia"></textarea>
+      </label>
+
+      <label>
+        Fecha:
+        <input formControlName="date" type="date" />
+      </label>
+
+      <!-- Opciones para editar imagen -->
+      <div class="image-tools">
+        <label>Zoom:</label>
+        <input
+          type="range"
+          min="0.5"
+          max="2"
+          step="0.1"
+          [value]="zoomFactor"
+          (input)="zoomFactor = $any($event.target).value; applyZoom()"
+        />
+        <button type="button" (click)="openCropper()">Recortar imagen</button>
+      </div>
+
+      <button type="submit" [disabled]="editForm.invalid">Guardar cambios</button>
+    </form>
+  </div>
+</div>

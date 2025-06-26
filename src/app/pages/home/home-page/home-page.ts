@@ -1,4 +1,4 @@
-import { Component, HostListener, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
@@ -15,10 +15,14 @@ export class HomePage implements OnInit {
   photos: Photo[] = [];
   searchTerm = '';
   filterDate = '';
+  date = ''; 
   showScrollTop = false;
   private styleMap: Map<string, any> = new Map();
 
-  constructor(private photoService: PhotoService) {}
+  constructor(
+  private photoService: PhotoService,  
+  private cd: ChangeDetectorRef
+  ) {}
 
   ngOnInit(): void {
     this.cargarFotos();
@@ -36,7 +40,10 @@ export class HomePage implements OnInit {
 
   private cargarFotos(): void {
     this.photoService.getPhotos().subscribe(
-      (photos) => (this.photos = photos),
+      (photos) => {
+        this.photos = photos;
+        this.cd.detectChanges(); // Forzamos actualización cuando las fotos llegan
+      },
       (error) => console.error('Error cargando fotos:', error)
     );
   }
@@ -48,28 +55,29 @@ export class HomePage implements OnInit {
         : true;
 
       const matchesDate = this.filterDate
-        ? new Date(photo.createdAt || '').toISOString().slice(0, 10) === this.filterDate
-        : true;
+      ? new Date(photo.createdAt || '').toISOString().slice(0, 10) === this.filterDate
+      : true;
 
       return matchesTitle && matchesDate;
     });
   }
 
-  getRandomStyle(id: string): any {
+  getRandomStyle(id: string | undefined): any {
+    if (!id) return {}; // Evita fallos si aún no hay ID
+
     if (!this.styleMap.has(id)) {
-      const directions = ['-100%', '100%', '0%'];
-      const angles = ['-8deg', '-4deg', '4deg', '8deg'];
+      const directions = ['-80px', '120px', '0px'];
+      const angles = ['-6deg', '-3deg', '3deg', '6deg'];
       const posX = directions[Math.floor(Math.random() * directions.length)];
       const posY = directions[Math.floor(Math.random() * directions.length)];
       const rotate = angles[Math.floor(Math.random() * angles.length)];
-      const width = Math.floor(Math.random() * 50 + 200);
+      const delay = Math.floor(Math.random() * 600);
 
       const style = {
         '--x': posX,
         '--y': posY,
         '--r': rotate,
-        '--stagger-order': Math.floor(Math.random() * 10),
-        width: `${width}px`
+        '--delay': `${delay}ms`,
       };
 
       this.styleMap.set(id, style);

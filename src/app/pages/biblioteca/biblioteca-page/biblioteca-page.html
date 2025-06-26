@@ -1,6 +1,6 @@
 <section class="library-container">
   <button class="back-btn" routerLink="/home">
-    <img src="assets/img/volverahome.png" alt="icono de volver a home" class="action-icon" />
+    <img src="assets/img/casa.png" alt="icono de volver a home" class="action-icon" />
     ← Volver a Home
   </button>
 
@@ -69,12 +69,17 @@
 
       <div class="actions-row">
         <button class="create-btn" routerLink="/crea-tu-recuerdo">
-          <img src="assets/img/crear-recuerdo.png" alt="crear recuerdo" class="action-icon" />
+          <img src="assets/img/crear.png" alt="crear recuerdo" class="action-icon" />
           Crear Recuerdo
         </button>
 
+        <button class="edit-btn" [routerLink]="['/editor-de-recuerdos', photo?._id]">
+          <img src="assets/img/editor.png" alt="Editar recuerdo" class="action-icon" />
+          Editar Recuerdo
+        </button>
+
         <button class="delete-btn" (click)="deletePhoto()">
-          <img src="assets/img/borrar-recuerdo.png" alt="borrar recuerdo" class="action-icon" />
+          <img src="assets/img/eliminar.png" alt="borrar recuerdo" class="action-icon" />
           Borrar Recuerdo
         </button>
       </div>

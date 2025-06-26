@@ -19,11 +19,7 @@
   </div>
 
   <div class="photos-grid">
-    <div
-      *ngFor="let photo of filteredPhotos()"
-      class="photo-card"
-      [ngStyle]="getRandomStyle(photo._id || '')"
-    >
+    <div class="photo-card" *ngFor="let photo of filteredPhotos()" [ngStyle]="getRandomStyle(photo._id)">
       <a [routerLink]="['/biblioteca', photo._id]">
         <img [src]="photo.imgUrl" [alt]="photo.title" />
       </a>

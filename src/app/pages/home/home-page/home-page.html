@@ -19,7 +19,13 @@
   </div>
 
   <div class="photos-grid">
-    <div class="photo-card" *ngFor="let photo of filteredPhotos()" [ngStyle]="getRandomStyle(photo._id)">
+    <div
+      class="photo-card"
+      *ngFor="let photo of filteredPhotos()"
+      #photoElement
+      [attr.data-photo-id]="photo._id"
+      [ngStyle]="getRandomStyle(photo._id)"
+    >
       <a [routerLink]="['/biblioteca', photo._id]">
         <img [src]="photo.imgUrl" [alt]="photo.title" />
       </a>
@@ -42,4 +48,13 @@
     (click)="scrollToTop()"
     (keydown.enter)="scrollToTop()"
   />
+  <div class="scroll-popup" *ngIf="showPopup">
+    <div class="popup-content">
+      <p>💌 Por fin tenemos nuestro álbum de foto, llenémoslo de momentos agradables.<br> 
+         💡Puedes buscar nuestros <strong>Mejores recuerdos</strong> en la barra de búsqueda.<br> 
+          ☝🏼O si quieres podemos <a routerLink="pages/creaturecuerdo/crea-tu-recuerdo/crea-tu-recuerdo-page">
+          <strong>Crear un Nuevo recuerdo</strong></a><br>📸¡Exploremos y hagamos <strong>Nuevos recuerdos</strong>!</p>
+          <button (click)="cerrarPopup()">Cerrar</button>
+    </div>
+  </div>
 </section>

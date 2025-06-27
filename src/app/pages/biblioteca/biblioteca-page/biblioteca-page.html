@@ -65,7 +65,7 @@
     <div class="photo-info">
       <h2>Descripción</h2>
       <p class="photo-description">{{ photo.description }}</p>
-      <p class="photo-date">Creado el {{ photo.createdAt | date }}</p>
+      <p class="photo-date">Creado el {{ photo.date | customDate:'long':'es-MX' }}</p>
 
       <div class="actions-row">
         <button class="create-btn" routerLink="/crea-tu-recuerdo">

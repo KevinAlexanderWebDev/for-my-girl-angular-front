@@ -1,60 +1,63 @@
 <section class="create-recall-container mixed">
-  <button class="volver-home" routerLink="/home">
-    <img src="assets/img/casa-after.png" alt="Volver a Home" class="home-button" />
-    Volver a Home
-  </button>
+  <div class="book-animation">
+    <button class="volver-home" routerLink="/home">
+      <img src="assets/img/casa-after.png" alt="Volver a Home" class="home-button" />
+      Volver a Home
+    </button>
 
-  <div class="recall-wrapper">
-    <div class="recall-preview">
-      <img
-        *ngIf="imagePreviewUrl; else defaultImg"
-        [src]="imagePreviewUrl"
-        alt="Vista previa"
-      />
-      <ng-template #defaultImg>
-        <img src="assets/img/image-example.jpg" alt="Ilustración por defecto" />
-      </ng-template>
-    </div>
+    <div class="recall-wrapper">
+      <div class="recall-preview">
+        <img
+          *ngIf="imagePreviewUrl; else defaultImg"
+          [src]="imagePreviewUrl"
+          alt="Vista previa"
+        />
+        <ng-template #defaultImg>
+          <img src="assets/img/image-example.jpg" alt="Ilustración por defecto" />
+        </ng-template>
+      </div>
 
-    <form [formGroup]="recuerdoForm" (ngSubmit)="onSubmit()" class="recall-form">
-      <img src="assets/img/pegatina.png" alt="Clip decorativo" class="clip-decor" />
-      <h1 class="page-title">📝 Escribe tu Recuerdo</h1>
+      <form [formGroup]="recuerdoForm" (ngSubmit)="onSubmit()" class="recall-form">
+        <img src="assets/img/pegatina.png" alt="Clip decorativo" class="clip-decor" />
+        <h1 class="page-title">📝 Escribe tu Recuerdo</h1>
 
-      <label class="field-group">
-        <span class="field-label">Título</span>
-        <input type="text" formControlName="title" placeholder="Un momento especial..." required />
-      </label>
+        <label class="field-group">
+          <span class="field-label">Título</span>
+          <input type="text" formControlName="title" placeholder="Un momento especial..." required />
+        </label>
 
-      <label class="field-group">
-        <span class="field-label">Fecha</span>
-        <input type="date" formControlName="date" required />
-      </label>
+        <label class="field-group">
+          <span class="field-label">Fecha</span>
+          <input type="date" formControlName="date" required />
+        </label>
 
-      <label class="field-group">
-        <span class="field-label">Descripción</span>
-        <textarea
-          formControlName="description"
-          rows="5"
-          placeholder="Ese día que nunca olvidarás..."
-          required
-        ></textarea>
-      </label>
+        <label class="field-group">
+          <span class="field-label">Descripción</span>
+          <textarea
+            formControlName="description"
+            rows="5"
+            placeholder="Ese día que nunca olvidarás..."
+            required
+          ></textarea>
+        </label>
 
-      <label class="field-group file">
-        <span class="field-label">Imagen</span>
-        <input type="file" (change)="onFileSelected($event)" accept="image/*" required />
-      </label>
+        <label class="field-group file">
+          <span class="field-label">Imagen</span>
+          <input type="file" (change)="onFileSelected($event)" accept="image/*" required />
+        </label>
 
-      <button
-        type="submit"
-        class="submit-btn"
-        [disabled]="recuerdoForm.invalid || !selectedFile"
-      >
-        Guardar Recuerdo
-      </button>
-    </form>
-    <div class="success-stamp" *ngIf="recuerdoCreado">
-      <img src="assets/img/sello-exito.png" alt="Recuerdo guardado" />
+        <button
+          type="submit"
+          class="submit-btn"
+          [disabled]="recuerdoForm.invalid || !selectedFile"
+        >
+          Guardar Recuerdo
+        </button>
+      </form>
+
+      <div class="success-stamp" *ngIf="recuerdoCreado">
+        <img src="assets/img/sello-exito.png" alt="Recuerdo guardado" />
+      </div>
     </div>
   </div>
 </section>

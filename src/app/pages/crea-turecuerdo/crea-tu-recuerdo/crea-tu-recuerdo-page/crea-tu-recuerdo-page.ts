@@ -1,8 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { PhotoService } from '../../../../core/services/photo.service';
+import { AudioService } from '../../../../core/services/audio.service';
 
 @Component({
   standalone: true,
@@ -11,22 +12,31 @@ import { PhotoService } from '../../../../core/services/photo.service';
   templateUrl: './crea-tu-recuerdo-page.html',
   styleUrls: ['./crea-tu-recuerdo-page.scss'],
 })
-export class CreaTuRecuerdoPage {
+export class CreaTuRecuerdoPage implements OnInit, OnDestroy {
   recuerdoForm: FormGroup;
   selectedFile: File | null = null;
   imagePreviewUrl: string | null = null;
-  recuerdoCreado= false; 
+  recuerdoCreado = false;
 
   constructor(
     private fb: FormBuilder,
     private photoService: PhotoService,
-    private router: Router
+    private router: Router,
+    private audioService: AudioService
   ) {
     this.recuerdoForm = this.fb.group({
       title: ['', Validators.required],
       date: ['', Validators.required],
       description: ['', Validators.required],
     });
+  }
+
+  ngOnInit(): void {
+    this.audioService.playAudio('assets/audio/Married-Life.mp3');
+  }
+
+  ngOnDestroy(): void {
+    this.audioService.stopAudio();
   }
 
   onFileSelected(event: Event) {
@@ -54,11 +64,11 @@ export class CreaTuRecuerdoPage {
       await this.photoService.uploadPhoto(title, description, this.selectedFile, date).toPromise();
       alert('✅ Recuerdo creado correctamente');
       this.recuerdoCreado = true;
-          setTimeout(() => {
-          this.recuerdoCreado = false;
-          this.router.navigate(['/home']);
-        }, 1800);
-      }catch (error) {
+      setTimeout(() => {
+        this.recuerdoCreado = false;
+        this.router.navigate(['/home']);
+      }, 1800);
+    } catch (error) {
       console.error(error);
       alert('Error al crear el recuerdo, inténtalo nuevamente');
     }

@@ -1,8 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, ReactiveFormsModule, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { PhotoService } from '../../core/services/photo.service';
+import { AudioService } from '../../core/services/audio.service';
 
 @Component({
   standalone: true,
@@ -11,7 +12,7 @@ import { PhotoService } from '../../core/services/photo.service';
   templateUrl: './editor-de-recuerdos.html',
   styleUrls: ['./editor-de-recuerdos.scss'],
 })
-export class EditorDeRecuerdosComponent {
+export class EditorDeRecuerdosComponent implements OnInit, OnDestroy {
   editForm: FormGroup;
   photoId?: string;
   zoomFactor = 1;
@@ -22,7 +23,8 @@ export class EditorDeRecuerdosComponent {
     private fb: FormBuilder,
     private route: ActivatedRoute,
     private router: Router,
-    private photoService: PhotoService
+    private photoService: PhotoService,
+    private audioService: AudioService
   ) {
     this.editForm = this.fb.group({
       title: ['', [Validators.required]],
@@ -32,7 +34,7 @@ export class EditorDeRecuerdosComponent {
     });
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.photoId = this.route.snapshot.paramMap.get('id') || '';
     if (this.photoId) {
       this.photoService.getPhoto(this.photoId).subscribe(photo => {
@@ -45,16 +47,20 @@ export class EditorDeRecuerdosComponent {
             ? new Date(photo.createdAt).toISOString().split('T')[0]
             : '',
         });
-        this.previewUrl = photo.imgUrl;
       });
     }
+
+    this.audioService.playAudio('assets/audio/Married-Life.mp3');
+  }
+
+  ngOnDestroy(): void {
+    this.audioService.stopAudio();
   }
 
   onSubmit() {
     if (this.editForm.valid && this.photoId) {
-      // Construimos el payload
       const payload = { ...this.editForm.value };
-      delete payload.imageFile; // removemos el control imageFile del payload si solo subes texto
+      delete payload.imageFile;
 
       this.photoService.updatePhoto(this.photoId, payload).subscribe(
         () => {
@@ -66,7 +72,6 @@ export class EditorDeRecuerdosComponent {
     }
   }
 
-  // Maneja la vista previa cuando el usuario elige una imagen
   onFileSelected(event: Event) {
     const file = (event.target as HTMLInputElement).files?.[0];
     if (file) {
@@ -80,17 +85,13 @@ export class EditorDeRecuerdosComponent {
     }
   }
 
-  // Aplica zoom a la imagen
   applyZoom() {
-    const imgElement = document.querySelector(
-      '.image-preview img'
-    ) as HTMLImageElement;
+    const imgElement = document.querySelector('.image-preview img') as HTMLImageElement;
     if (imgElement) {
       imgElement.style.transform = `scale(${this.zoomFactor})`;
     }
   }
 
-  // Placeholder para el futuro cropper
   openCropper() {
     alert('Kevin, favor de agregar el programa de recortes de ngx o alguna similar');
   }

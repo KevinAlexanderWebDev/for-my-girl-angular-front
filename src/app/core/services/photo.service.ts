@@ -16,7 +16,7 @@ export interface Photo {
   providedIn: 'root'
 })
 export class PhotoService {
-  private apiUrl = `${environment.apiUrl}/photos`; 
+  private apiUrl = `${environment.apiUrl}/photos`;//Recordar cambiar cuando apliquemos server externo 
 
   constructor(private http: HttpClient) {}
 
@@ -36,7 +36,7 @@ export class PhotoService {
     formData.append('title', title);
     formData.append('description', description);
     formData.append('date', date);
-    formData.append('image', file); // clave "image"
+    formData.append('image', file); 
     return this.http.post<Photo>(this.apiUrl, formData);
   }
 

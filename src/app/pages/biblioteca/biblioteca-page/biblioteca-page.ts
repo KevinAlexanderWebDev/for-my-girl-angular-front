@@ -1,17 +1,19 @@
-import { Component, ChangeDetectorRef } from '@angular/core';
+import { Component, ChangeDetectorRef, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { PhotoService, Photo } from '../../../core/services/photo.service';
 import { Router } from '@angular/router';
+import { AudioService } from '../../../core/services/audio.service';
+import { CustomDatePipe } from '../../../core/pipe/pipecustom-date.pipe-pipe';
 
 @Component({
   standalone: true,
   selector: 'app-biblioteca-page',
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule, RouterLink, CustomDatePipe],
   templateUrl: './biblioteca-page.html',
   styleUrls: ['./biblioteca-page.scss'],
 })
-export class BibliotecaPage {
+export class BibliotecaPage implements OnInit, OnDestroy {
   photo?: Photo;
   isModalOpen = false;
   isDragging = false;
@@ -20,13 +22,14 @@ export class BibliotecaPage {
   translateX = 0;
   translateY = 0;
   rotation = 0;
-  scale = 1;//para el zoom de la imagen del modal 
+  scale = 1;
 
   constructor(
     private route: ActivatedRoute,
     private photoService: PhotoService, 
     private router: Router,
-    private cd: ChangeDetectorRef
+    private cd: ChangeDetectorRef,
+    private audioService: AudioService
   ) {}
 
   ngOnInit() {
@@ -35,13 +38,19 @@ export class BibliotecaPage {
       this.photoService.getPhoto(id).subscribe(
         (photo) => {
           this.photo = photo;
-          this.cd.detectChanges(); // <- Forzamos actualización
+          this.cd.detectChanges();
         },
         (error) => console.error('Error cargando foto:', error)
       );
     }
+
+    this.audioService.playAudio('assets/audio/sparks.mp3');
   }
-  
+
+  ngOnDestroy(): void {
+    this.audioService.stopAudio();
+  }
+
   deletePhoto(): void {
     if (this.photo?._id) {
       this.photoService.deletePhoto(this.photo._id).subscribe(
@@ -56,7 +65,7 @@ export class BibliotecaPage {
       );
     }
   }
-  //Realizado para el modal de fotos, nuevas características, etc. 
+
   onMouseDown(event: MouseEvent | TouchEvent) {
     this.isDragging = true;
     const point = 'touches' in event ? event.touches[0] : event;
@@ -105,8 +114,8 @@ export class BibliotecaPage {
     this.rotation = 0;
     this.scale = 1;
   }
+
   shouldHideToolbar(): boolean {
     return this.scale !== 1;
   }
 }
-

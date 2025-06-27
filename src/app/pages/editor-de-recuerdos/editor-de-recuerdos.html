@@ -2,9 +2,13 @@
 
   <!-- Imagen a pantalla completa (o bien dividida en columna izquierda) -->
   <div class="image-preview-container">
-    <img [src]="previewUrl || photo?.imgUrl" alt="Previsualización del recuerdo" />
+    <img
+      [src]="previewUrl || photo?.imgUrl"
+      alt="Previsualización del recuerdo"
+      [style.transform]="'scale(' + zoomFactor + ')'"
+      style="transition: transform 0.3s ease;"
+    />
   </div>
-
   <!-- Panel del editor -->
   <div class="editor-container">
     <h2>Editar Recuerdo</h2>

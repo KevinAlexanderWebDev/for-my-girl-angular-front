@@ -4,33 +4,37 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, #f7f9fc, #e2e8f0);
   padding: 0rem;
   box-sizing: border-box;
+  background: linear-gradient(135deg, #a01a1a, #f60202);
+  color: #f5f5f5;
 
   .lock-icon {
     width: 80px;
     height: auto;
     margin: 1rem 0 0 0; 
-    animation: bounce 1s infinite alternate;
+    animation: slideFadeIn 0.7s ease-out both;
   }
 
   h1 {
     font-size: 1.8rem;
-    color: #2d3748;
-    margin-bottom: 1rem;
+    color: #f5f5f5;
     text-align: center;
+    animation: slideFadeIn 0.7s ease-out both;
   }
 
   form {
-    background: white;
     padding: 2rem;
-    border-radius: 1rem;
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
     width: 100%;
     max-width: 320px;
     display: flex;
     flex-direction: column;
+    animation: slideFadeIn 0.7s ease-out both;
+    backdrop-filter: blur(10px);
+    background: rgba(255, 255, 255, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    box-shadow: 0 8px 32px rgba(31, 38, 135, 0.2);
+    border-radius: 1.5rem;
 
     label {
       margin: 0.5rem 0 0.25rem;
@@ -45,6 +49,9 @@
       margin-bottom: 1rem;
       font-size: 1rem;
       transition: border-color 0.2s;
+      color: #000;
+      background: #fffaf0;
+      border-color: #b2937a;
 
       &:focus {
         border-color: #3182ce;
@@ -54,7 +61,7 @@
     }
 
     button {
-      background: #3182ce;
+      transition: all 0.3s ease;
       color: white;
       padding: 0.75rem;
       border: none;
@@ -62,10 +69,12 @@
       cursor: pointer;
       font-weight: 600;
       font-size: 1rem;
-      transition: background 0.2s;
+      backdrop-filter: blur(3px);
+      background: #d53f8c;
+
 
       &:hover:enabled {
-        background: #2c5282;
+        background: #d60e5e;
       }
 
       &:disabled {
@@ -84,16 +93,61 @@
   }
 
   .text-muted {
-    color: #718096;
+    color: #fff;
     font-size: 0.875rem;
+    animation: slideFadeIn 0.7s ease-out both;
   }
 
-  @keyframes bounce {
-    from {
-      transform: translateY(0);
-    }
-    to {
-      transform: translateY(-5px);
-    }
+}
+@keyframes slideFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
+.login-tip-tag {
+  position: absolute;
+  top: 30%;
+  right: 30px;
+  transform: rotate(6deg);
+  background: #ffe0f0;
+  color: #4a2a2a;
+  padding: 0.8rem 1.2rem;
+  border-radius: 1rem 1rem 0 1rem;
+  font-family: 'Georgia', serif;
+  font-size: 0.9rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  animation: fadeInTip 1.5s ease-in-out both;
+  z-index: 20;
+  max-width: 240px;
+
+  .tip-label {
+    display: block;
+    text-align: center;
+  }
+
+  @media (max-width: 768px) {
+    right: auto;
+    left: 50%;
+    transform: translateX(-50%) rotate(0deg);
+    top: 90%;
+    font-size: 0.8rem;
+    border-radius: 1rem;
+  }
+}
+
+@keyframes fadeInTip {
+  from {
+    opacity: 0;
+    transform: translateX(50px) rotate(10deg);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0) rotate(6deg);
+  }
+}
+

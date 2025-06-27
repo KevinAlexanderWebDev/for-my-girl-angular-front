@@ -10,13 +10,11 @@ export const routes: Routes = [
     path: 'home',
     loadComponent: () =>
       import('./pages/home/home-page/home-page').then(m => m.HomePage),
-    // luego le pondremos el guard aquí
   },
   {
     path: 'biblioteca/:id',
     loadComponent: () =>
       import('./pages/biblioteca/biblioteca-page/biblioteca-page').then(m => m.BibliotecaPage),
-    // luego le pondremos el guard aquí
   },
   {
     path: 'crea-tu-recuerdo',

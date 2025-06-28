@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  apiUrl: 'https://tu-backend-render.onrender.com' // cuando estés desplegado
+  apiUrl: 'https://for-my-girl-angular-back.onrender.com' // cuando estés desplegado
 };

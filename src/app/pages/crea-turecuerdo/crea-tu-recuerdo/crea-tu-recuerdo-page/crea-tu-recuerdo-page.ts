@@ -4,11 +4,12 @@ import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angula
 import { Router, RouterLink } from '@angular/router';
 import { PhotoService } from '../../../../core/services/photo.service';
 import { AudioService } from '../../../../core/services/audio.service';
+import { NgxSpinnerService, NgxSpinnerModule } from 'ngx-spinner';
 
 @Component({
   standalone: true,
   selector: 'app-crea-tu-recuerdo-page',
-  imports: [CommonModule, ReactiveFormsModule, RouterLink],
+  imports: [CommonModule, ReactiveFormsModule, RouterLink, NgxSpinnerModule],
   templateUrl: './crea-tu-recuerdo-page.html',
   styleUrls: ['./crea-tu-recuerdo-page.scss'],
 })
@@ -22,7 +23,8 @@ export class CreaTuRecuerdoPage implements OnInit, OnDestroy {
     private fb: FormBuilder,
     private photoService: PhotoService,
     private router: Router,
-    private audioService: AudioService
+    private audioService: AudioService,
+    private spinner: NgxSpinnerService
   ) {
     this.recuerdoForm = this.fb.group({
       title: ['', Validators.required],
@@ -32,10 +34,12 @@ export class CreaTuRecuerdoPage implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    console.log('🎵 Reproduciendo audio: Married-Life.mp3');
     this.audioService.playAudio('assets/audio/Married-Life.mp3');
   }
 
   ngOnDestroy(): void {
+    console.log('🛑 Deteniendo audio');
     this.audioService.stopAudio();
   }
 
@@ -61,15 +65,26 @@ export class CreaTuRecuerdoPage implements OnInit, OnDestroy {
     const { title, description, date } = this.recuerdoForm.value;
 
     try {
-      await this.photoService.uploadPhoto(title, description, this.selectedFile, date).toPromise();
+      console.log('⏳ Mostrando spinner: subiendo imagen...');
+      this.spinner.show();
+
+      await this.photoService
+        .uploadPhoto(title, description, this.selectedFile, date)
+        .toPromise();
+
+      this.spinner.hide();
+      console.log('✅ Recuerdo creado correctamente y spinner ocultado');
+
       alert('✅ Recuerdo creado correctamente');
       this.recuerdoCreado = true;
+
       setTimeout(() => {
         this.recuerdoCreado = false;
         this.router.navigate(['/home']);
       }, 1800);
     } catch (error) {
-      console.error(error);
+      this.spinner.hide();
+      console.error('❌ Error al subir recuerdo:', error);
       alert('Error al crear el recuerdo, inténtalo nuevamente');
     }
   }

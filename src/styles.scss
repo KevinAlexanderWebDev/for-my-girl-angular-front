@@ -3,7 +3,8 @@
 // Fuente
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
 
-// Paleta
+
+// Paleta de colores primarios escogidos
 $color-primary: #7b4bff;
 $color-primary-light: #a47aff;
 $color-bg: #f8f8ff;
@@ -73,3 +74,7 @@ a {
 * {
   transition: all 0.2s ease-in-out;
 }
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+

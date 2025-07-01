@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
-import { environment } from '../../../environments/environment';// usa tu env
+import { Observable, finalize } from 'rxjs';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { environment } from '../../../environments/environment';
 
 export interface Photo {
   _id?: string;
@@ -9,35 +10,40 @@ export interface Photo {
   description: string; 
   imgUrl: string;
   date: string; 
-  createdAt?: string; //El signo de pregunta invertido hace al valor indefinido XD
+  createdAt?: string;
 }
 
 @Injectable({
   providedIn: 'root'
 })
 export class PhotoService {
-  private apiUrl = `${environment.apiUrl}/photos`;//Recordar cambiar cuando apliquemos server externo 
+  private apiUrl = `${environment.apiUrl}/photos`;
 
-  constructor(private http: HttpClient) {}
+  constructor(
+    private http: HttpClient,
+    private spinner: NgxSpinnerService
+  ) {}
 
-  // Petición tipo GET para obtener todas las fotos
   getPhotos(): Observable<Photo[]> {
     return this.http.get<Photo[]>(this.apiUrl);
   }
 
-  // Petición tipo GET para obtener una sola foto | por ID
   getPhoto(id: string): Observable<Photo> {
     return this.http.get<Photo>(`${this.apiUrl}/${id}`);
   }
 
-  // POST subir una nueva foto
   uploadPhoto(title: string, description: string, file: File, date: string): Observable<Photo> {
     const formData = new FormData();
     formData.append('title', title);
     formData.append('description', description);
     formData.append('date', date);
-    formData.append('image', file); 
-    return this.http.post<Photo>(this.apiUrl, formData);
+    formData.append('image', file);
+
+    this.spinner.show(); // Mostrar spinner antes de enviar
+
+    return this.http.post<Photo>(this.apiUrl, formData).pipe(
+      finalize(() => this.spinner.hide()) // Ocultar spinner al terminar
+    );
   }
 
   updatePhoto(id: string, data: Partial<Photo>) {

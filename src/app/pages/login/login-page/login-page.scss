@@ -44,19 +44,19 @@
 
     input {
       padding: 0.75rem;
-      border: 1px solid #cbd5e0;
       border-radius: 0.5rem;
       margin-bottom: 1rem;
       font-size: 1rem;
-      transition: border-color 0.2s;
       color: #000;
       background: #fffaf0;
       border-color: #b2937a;
+      border: 2px solid #ccc;
+      transition: border-color 0.3s ease, box-shadow 0.4s ease;
 
       &:focus {
-        border-color: #3182ce;
+        box-shadow: 0 0 8px rgba(213, 63, 140, 0.6);
         outline: none;
-        box-shadow: 0 0 0 3px rgba(49, 130, 206, 0.2);
+        border-color: #f06292;
       }
     }
 
@@ -80,6 +80,35 @@
       &:disabled {
         background: #a0aec0;
         cursor: not-allowed;
+      }
+    }
+
+    .input-group {
+      position: relative;
+
+      input {
+        padding-top: 1.5rem;
+      }
+
+      label {
+        position: absolute;
+        top: 0.75rem;
+        left: 0.75rem;
+        color: #aaa;
+        font-size: 1rem;
+        transition: all 0.2s ease-out;
+        pointer-events: none;
+      }
+
+      input:focus + label,
+      input:not(:placeholder-shown) + label {
+        top: -0.5rem;
+        left: 0.5rem;
+        font-size: 0.75rem;
+        color: #d60e5e;
+        background: transparent;
+        padding: 0 0.25rem;
+        border-radius: 0.25rem;
       }
     }
   }
@@ -114,7 +143,7 @@
   top: 30%;
   right: 30px;
   transform: rotate(6deg);
-  background: #ffe0f0;
+  background: #fff8e0;
   color: #4a2a2a;
   padding: 0.8rem 1.2rem;
   border-radius: 1rem 1rem 0 1rem;
@@ -150,4 +179,3 @@
     transform: translateX(0) rotate(6deg);
   }
 }
-

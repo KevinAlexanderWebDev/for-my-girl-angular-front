@@ -1,9 +1,15 @@
+.photos-list-container {
+  background: linear-gradient(180deg, #fff8f5 0%, #fde3ec 100%);
+  min-height: 100vh;
+}
+
 .header-row {  
   position: sticky;
+  padding: 1.5rem 1.5rem 0;
+  --line-scale: 0;
   top: 0;
   z-index: 1000;
   background-color: #fdf9f6;
-  padding: 1rem 2rem;
   border-bottom: 1px solid #e0e0e0;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
   transition: box-shadow 0.3s ease, background-color 0.3s ease;
@@ -12,40 +18,155 @@
   justify-content: space-between;
   gap: 1rem;
 
-  h1.page-title {
-    display: flex;
-    align-items: center;
-    font-size: 1.2rem;
+  &.scrolled {
+    background-color: #fce8f1; 
+  }
+
+  .page-title {
+    font-size: 1.4rem;
     font-weight: bold;
-    color: #444;
+    color: #4a2a2a;
+    animation: titleFloatIn 1.2s ease-out both;
+    transform-origin: left center;
+    position: relative;
+    overflow: hidden;
+    flex: 0 0 25%;
+
+    img {
+      margin-right: 0.5rem;
+      width: 38px;
+      height: auto;
+      animation: bounceIcon 1s ease-out both;
+    }
   }
 
-  .filter-icon {
-    width: 28px;
-    height: 28px;
-    margin-right: 0.5rem;
+  @keyframes titleFloatIn {
+    0% {
+      opacity: 0;
+      transform: translateX(-20px) scale(0.95);
+    }
+    100% {
+      opacity: 1;
+      transform: translateX(0) scale(1);
+    }
   }
 
-  .search-input,
-  .date-input {
-    padding: 0.6rem 1rem;
-    font-size: 1rem;
-    border: 1px solid #ccc;
-    border-radius: 1rem;
-    background-color: #fff;
-    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+  @keyframes bounceIcon {
+    0% { transform: scale(0.8) rotate(-10deg); }
+    50% { transform: scale(1.15) rotate(10deg); }
+    100% { transform: scale(1) rotate(0); }
   }
 
-  .search-input {
-    flex: 0 0 60%;
-  }
-
-  .date-input {
-    flex: 0 0 10%;
-  }
-
-  h1.page-title {
+  .floating-input-date {
+    position: relative;
+    margin-top: 0.5rem;
     flex: 0 0 20%;
+    animation: titleFloatIn 1.2s ease-out both;
+
+    input {
+      width: 100%;
+      padding: 1.2rem 1rem 0.4rem;
+      font-size: 1rem;
+      border: 2px solid #ccc;
+      border-radius: 0.55rem;
+      background-color: #fff;
+      transition: border-color 0.3s ease;
+    }
+
+    label {
+      position: absolute;
+      left: 1rem;
+      top: 1rem;
+      background: #fff;
+      padding: 0 0.25rem;
+      color: #999;
+      font-size: 1rem;
+      transition: all 0.2s ease;
+      pointer-events: none;
+    }
+
+    input:focus + label,
+    input:not(:placeholder-shown) + label {
+      top: -0.6rem;
+      left: 0.8rem;
+      font-size: 0.75rem;
+      color: #d53f8c;
+      background: #fff;   
+      border-radius: 25% 25% 0 0;
+    }
+
+    input:focus{
+      outline: none;
+      border-color: #d53f8c;
+    }
+
+    @keyframes titleFloatIn {
+      0% {
+        opacity: 0;
+        transform: translateX(-20px) scale(0.95);
+      }
+      100% {
+        opacity: 1;
+        transform: translateX(0) scale(1);
+      }
+    }
+  }
+
+  // ✨ Animación global
+  @keyframes floatInDate {
+    from {
+      opacity: 0;
+      transform: translateY(8px) scale(0.98);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+  }
+
+
+  .floating-input-search {
+    position: relative;
+    margin-top: 0.5rem;
+    flex: 0 0 50%;
+    animation: titleFloatIn 1.2s ease-out both;
+
+    input {
+      width: 100%;
+      padding: 1.2rem 1rem 0.4rem;
+      font-size: 1rem;
+      border: 2px solid #ccc;
+      border-radius: 0.55rem;
+      background-color: #fff;
+      transition: border-color 0.3s ease;
+    }
+
+    label {
+      position: absolute;
+      left: 1rem;
+      top: 1rem;
+      background: #fff;
+      padding: 0 0.25rem;
+      color: #999;
+      font-size: 1rem;
+      transition: all 0.2s ease;
+      pointer-events: none;
+    }
+
+    input:focus + label,
+    input:not(:placeholder-shown) + label {
+      top: -0.6rem;
+      left: 0.8rem;
+      font-size: 0.75rem;
+      color: #d53f8c;
+      background: #fff;   
+      border-radius: 25% 25% 0 0;
+    }
+
+    input:focus{
+      outline: none;
+      border-color: #d53f8c;
+    }
   }
 
   @media (max-width: 768px) {
@@ -71,11 +192,35 @@
   }
 }
 
-// Layout tipo Masonry con column-count
-.photos-grid {
-  column-count: 4;
-  column-gap: 0.5rem;
-  padding: 1rem;
+.header-row::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 4px;
+  width: 100%;
+  background: linear-gradient(to right, #fcbfd9, #ff7cae);
+  border-radius: 2px;
+  transform-origin: left;
+  transform: scaleX(var(--line-scale));
+  transition:
+    transform 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+    background 0.4s ease;
+}
+
+  @keyframes slideBar {
+    from {
+      transform: scaleX(0);
+    }
+    to {
+      transform: scaleX(1);
+    }
+  }
+
+  .photos-grid {
+    column-count: 4;
+    column-gap: 0.5rem;
+    padding: 1rem;
 
   @media (max-width: 1024px) {
     column-count: 3;
@@ -149,6 +294,7 @@
     margin: 0.5rem auto 1rem;
     background: #eaeaea;
     border: none;
+    color: #ff7cae;
     padding: 0.4rem 0.8rem;
     border-radius: 0.25rem;
     font-size: 0.85rem;
@@ -156,6 +302,7 @@
 
     &:hover {
       background: #d5d5d5;
+      color: #d53f8c;
     }
   }
 }
@@ -170,7 +317,7 @@
 // Botón flotante scroll to top
 .scroll-to-top-img {
   position: fixed;
-  z-index: 1000;
+  z-index: 998;
   bottom: 1.5rem;
   right: 1.5rem;
   width: 60px;
@@ -245,7 +392,7 @@
   border-radius: 1rem;
   padding: 1rem 1.5rem;
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
-  max-width: 600px;
+  max-width: 450px;
   z-index: 999;
   animation: popSlideIn 0.8s ease-out forwards;
 
@@ -259,6 +406,7 @@
       font-size: 1rem;
       color: #4b2c2c;
       line-height: 1.4;
+      padding-bottom: 0.5rem;
     }
 
     button {

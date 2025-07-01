@@ -57,17 +57,17 @@
 
     .polaroid-frame {
       background: #fff;
-      padding: 1rem 1rem 2rem;
+      padding: 1rem 1rem 1rem;
       border: 1px solid #ccc;
       border-radius: 0.5rem;
       box-shadow: 2px 6px 18px rgba(0, 0, 0, 0.1);
       text-align: center;
       width: 100%;
-      max-width: 360px;
+      max-width: 460px;
       transform: rotate(-1.5deg);
 
       img {
-        width: 65%;
+        width: 75%;
         border-radius: 0.25rem;
         object-fit: cover;
         margin-bottom: 0.75rem;
@@ -156,6 +156,7 @@
     .photo-polaroid,
     .photo-info {
       width: 100%;
+      flex: 1 1 100px;
     }
 
     .actions-row {
@@ -188,7 +189,7 @@
   .modal-content {
     max-width: 92%;
     max-height: 92%;
-    background: #000;
+    background-color:  #f8f8ff;
     border-radius: 0.75rem;
     padding: 1rem;
     position: relative;

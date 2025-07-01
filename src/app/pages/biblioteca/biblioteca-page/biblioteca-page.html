@@ -5,7 +5,6 @@
   </button>
 
   <div *ngIf="photo" class="library-layout">
-    <!-- Lado izquierdo: Imagen tipo polaroid -->
     <div class="photo-polaroid">
       <div class="polaroid-frame">
         <img
@@ -18,7 +17,6 @@
       </div>
     </div>
 
-    <!-- Modal de imagen ampliada con controles -->
     <div class="modal" [class.active]="isModalOpen" (click)="closeModal()">
       <div class="modal-content" (click)="$event.stopPropagation()">
         <div class="modal-toolbar" *ngIf="!shouldHideToolbar()">
@@ -43,7 +41,6 @@
           ↺
         </button>
 
-        <!-- Imagen con zoom, rotación y arrastre -->
         <img
           [src]="photo?.imgUrl"
           [alt]="photo?.title"
@@ -61,7 +58,6 @@
       </div>
     </div>
 
-    <!-- Lado derecho: Detalles -->
     <div class="photo-info">
       <h2>Descripción</h2>
       <p class="photo-description">{{ photo.description }}</p>
@@ -86,3 +82,4 @@
     </div>
   </div>
 </section>
+

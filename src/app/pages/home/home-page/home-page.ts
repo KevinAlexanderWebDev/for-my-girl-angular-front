@@ -1,30 +1,40 @@
-import { Component, HostListener, OnInit, OnDestroy, ChangeDetectorRef, 
-ElementRef, ViewChildren, QueryList, AfterViewInit } from '@angular/core';
+import {
+  Component,
+  HostListener,
+  OnInit,
+  OnDestroy,
+  AfterViewInit,
+  ChangeDetectorRef,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { RouterModule } from '@angular/router';
+import { RouterModule, RouterLink } from '@angular/router';
 import { PhotoService, Photo } from '../../../core/services/photo.service';
 import { AudioService } from '../../../core/services/audio.service';
 
 @Component({
   standalone: true,
   selector: 'app-home',
-  imports: [CommonModule, FormsModule, RouterModule],
+  imports: [
+    CommonModule,
+    FormsModule,
+    RouterModule,
+    RouterLink,
+  ],
   templateUrl: './home-page.html',
   styleUrls: ['./home-page.scss'],
 })
-export class HomePage implements OnInit, OnDestroy {
+export class HomePage implements OnInit, AfterViewInit, OnDestroy {
   photos: Photo[] = [];
   searchTerm = '';
-  filterDate = '';
-  date = ''; 
+  filterDate = ''; // Aquí se enlazará directamente el input date
   showScrollTop = false;
   private styleMap: Map<string, any> = new Map();
   showPopup = false;
   hasScrolledOnce = false;
 
   constructor(
-    private photoService: PhotoService,  
+    private photoService: PhotoService,
     private cd: ChangeDetectorRef,
     private audioService: AudioService
   ) {}
@@ -34,6 +44,10 @@ export class HomePage implements OnInit, OnDestroy {
     this.audioService.playAudio('assets/audio/Gravity.mp3');
   }
 
+  ngAfterViewInit(): void {
+    setTimeout(() => this.onWindowScroll(), 0);
+  }
+
   ngOnDestroy(): void {
     this.audioService.stopAudio();
   }
@@ -41,8 +55,23 @@ export class HomePage implements OnInit, OnDestroy {
   @HostListener('window:scroll', [])
   onWindowScroll(): void {
     const yOffset = window.pageYOffset || document.documentElement.scrollTop;
+    const documentHeight =
+      document.documentElement.scrollHeight - window.innerHeight;
+    const scrollRatio = Math.min(yOffset / documentHeight, 1);
+
+    const header = document.querySelector('.header-row') as HTMLElement;
+    if (header) {
+      if (yOffset > 30) {
+        header.classList.add('scrolled');
+      } else {
+        header.classList.remove('scrolled');
+      }
+
+      header.style.setProperty('--line-scale', `${scrollRatio}`);
+    }
+
     this.showScrollTop = yOffset > 300;
-    
+
     if (yOffset > 200 && !this.hasScrolledOnce) {
       this.showPopup = true;
       this.hasScrolledOnce = true;
@@ -53,7 +82,7 @@ export class HomePage implements OnInit, OnDestroy {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
-  cerrarPopup() {
+  cerrarPopup(): void {
     this.showPopup = false;
   }
 
@@ -61,7 +90,7 @@ export class HomePage implements OnInit, OnDestroy {
     this.photoService.getPhotos().subscribe(
       (photos) => {
         this.photos = photos;
-        this.cd.detectChanges(); // Forzamos actualización cuando las fotos llegan
+        this.cd.detectChanges();
       },
       (error) => console.error('Error cargando fotos:', error)
     );
@@ -74,7 +103,9 @@ export class HomePage implements OnInit, OnDestroy {
         : true;
 
       const matchesDate = this.filterDate
-        ? new Date(photo.date || '').toISOString().slice(0, 10) === this.filterDate
+        ? new Date(photo.date || '')
+            .toISOString()
+            .slice(0, 10) === this.filterDate
         : true;
 
       return matchesTitle && matchesDate;

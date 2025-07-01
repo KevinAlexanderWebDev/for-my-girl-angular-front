@@ -1,15 +1,18 @@
 <div class="editor-page">
-
-  <!-- Imagen a pantalla completa (o bien dividida en columna izquierda) -->
+  <!-- Columna izquierda: Previsualización de imagen -->
   <div class="image-preview-container">
     <img
       [src]="previewUrl || photo?.imgUrl"
       alt="Previsualización del recuerdo"
+      class="image-preview"
       [style.transform]="'scale(' + zoomFactor + ')'"
-      style="transition: transform 0.3s ease;"
     />
+    <button class="toggle-recorte-btn" (click)="abrirModalRecorte()" title="Recortar imagen actual">
+      <img src="assets/img/tijeras.png" alt="Recortar" />
+    </button>
   </div>
-  <!-- Panel del editor -->
+
+  <!-- Columna derecha: Panel de edición -->
   <div class="editor-container">
     <h2>Editar Recuerdo</h2>
 
@@ -21,7 +24,7 @@
 
       <label>
         Descripción:
-        <textarea formControlName="description" placeholder="Cuenta tu historia"></textarea>
+        <textarea formControlName="description" placeholder="Cuenta tu historia..."></textarea>
       </label>
 
       <label>
@@ -29,7 +32,7 @@
         <input formControlName="date" type="date" />
       </label>
 
-      <!-- Opciones para editar imagen -->
+      <!-- Herramientas de imagen -->
       <div class="image-tools">
         <label>Zoom:</label>
         <input
@@ -40,10 +43,51 @@
           [value]="zoomFactor"
           (input)="zoomFactor = $any($event.target).value; applyZoom()"
         />
-        <button type="button" (click)="openCropper()">Recortar imagen</button>
+
+        <label class="file-upload">
+          <input type="file" accept="image/*" (change)="onFileSelected($event)" />
+          Seleccionar imagen
+        </label>
+         <label class="save-as-new-cropp">
+          <input
+            type="checkbox"
+            [(ngModel)]="saveAsNew"
+            name="saveAsNew"
+            [ngModelOptions]="{ standalone: true }"
+          />
+          <img src="assets/img/guardar-copper.png" alt="Recortar" />
+          Guardar como nuevo recuerdo
+        </label>
+      </div>
+
+      <!-- Cropper solo cuando se selecciona nueva imagen -->
+     <image-cropper
+      *ngIf="mostrarCropper"
+      [imageBase64]="imageBase64"
+      [maintainAspectRatio]="false"
+      [resizeToWidth]="600"
+      [imageQuality]="0.7"    
+      format="png"
+      (imageCropped)="onImageCropped($event)"
+    ></image-cropper>
+
+      <!-- Acciones del cropper -->
+      <div *ngIf="imageBase64" class="cropper-actions">
+        <button type="button" (click)="onCropCancel()">Cancelar recorte</button>
       </div>
 
       <button type="submit" [disabled]="editForm.invalid">Guardar cambios</button>
     </form>
+  </div>
+</div>
+
+<div class="modal-overlay" *ngIf="showCropModal">
+  <div class="modal-content">
+    <h3>¿Quieres recortar la imagen actual?</h3>
+    <p>Se abrirá el recortador y podrás ajustar la foto antes de guardar.</p>
+    <div class="modal-actions">
+      <button (click)="confirmarRecorte()">Sí, recortar</button>
+      <button (click)="cerrarModalRecorte()">Cancelar</button>
+    </div>
   </div>
 </div>

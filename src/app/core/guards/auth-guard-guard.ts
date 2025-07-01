@@ -8,8 +8,8 @@ import { Router } from '@angular/router';
 export class AuthService {
   private isAuthenticated = false;
   private allowedUsers = [
-    { username: 'Kevin', password: '1234' },
-    { username: 'Isis Alejandra', password: '1234' }
+    { username: 'Kevin-fit-18', password: 'Guffy' },
+    { username: 'Aleaveneli', password: 'Sparks' }
   ];
 
   constructor(@Inject(PLATFORM_ID) private platformId: Object) {

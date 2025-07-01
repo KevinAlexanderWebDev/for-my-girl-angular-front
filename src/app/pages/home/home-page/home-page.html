@@ -1,21 +1,18 @@
 <section class="photos-list-container">
   <div class="header-row">
     <h1 class="page-title">
-      <img src="assets/img/album-de-fotos.png" alt class="filter-icon" />
-      Our photo album
+      <img src="assets/img/album-de-fotos.png" alt class="filter-icon"/>  
+      Our Adventure Book
     </h1>
-    <input
-      type="text"
-      placeholder="Buscar por título..."
-      [(ngModel)]="searchTerm"
-      class="search-input"
-    />
-    <img src="assets/img/filtrar.png" alt="Filtro" class="filter-icon" />
-    <input
-      type="date"
-      [(ngModel)]="filterDate"
-      class="date-input"
-    />
+    <div class="floating-input-search">
+      <input type="text" id="search" [(ngModel)]="searchTerm" placeholder=" " />
+      <label for="search">🔍 Buscar por título</label>
+    </div>
+   
+    <div class="floating-input-date">
+      <input type="date" id="filtroFecha" [(ngModel)]="filterDate" placeholder=" " />
+      <label for="filtroFecha">Filtrar por fecha</label>
+    </div>
   </div>
 
   <div class="photos-grid">
@@ -50,7 +47,7 @@
   />
   <div class="scroll-popup" *ngIf="showPopup">
     <div class="popup-content">
-      <p>💌 Por fin tenemos nuestro álbum de foto, llenémoslo de momentos agradables.<br> 
+      <p>💌 Por fin tenemos nuestro propio Adventure Book, aquí podremos buscar, actualizar y crear <strong>nuevos</strong> recuerdos juntos.<br> 
          💡Puedes buscar nuestros <strong>Mejores recuerdos</strong> en la barra de búsqueda.<br> 
           ☝🏼O si quieres podemos <a routerLink="pages/creaturecuerdo/crea-tu-recuerdo/crea-tu-recuerdo-page">
           <strong>Crear un Nuevo recuerdo</strong></a><br>📸¡Exploremos y hagamos <strong>Nuevos recuerdos</strong>!</p>
